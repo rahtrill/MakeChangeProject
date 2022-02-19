@@ -8,6 +8,8 @@ public class CashRegister {
 		
 		Scanner kb = new Scanner(System.in);
 		
+		double amountDue = kb.nextDouble();
+		
 		kb.close();
 	}
 
