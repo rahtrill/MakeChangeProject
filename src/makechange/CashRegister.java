@@ -26,12 +26,12 @@ public class CashRegister {
 	}
 
 	public static void calculateChange(double amountDue, double tendered) {
-		double changeDue = (double) (tendered - amountDue); // Calculates the change due
+		double changeDue = (tendered - amountDue);// Calculates the change due
 		int pennies = 0, nickels = 0, dimes = 0, quarters = 0, dollars = 0, dollars5 = 0, dollars10 = 0, dollars20 = 0;
 
-		// This sends the value back out. The double was giving a large decimal number
+		// This sends the value back out. The double was giving a larger decimal number
 		// than it should, so I used printf to format.
-		System.out.printf("Change due: $%.2f %n", changeDue);
+		System.out.printf("Change due: $%.02f %n", changeDue);
 
 		// Calculates different pieces of change owed by dividing change into change
 		// value and then subtracting larger change from the value.
@@ -45,10 +45,8 @@ public class CashRegister {
 				- (quarters * 2.5));
 		nickels = (int) ((changeDue / 0.05) - (dollars20 * 400) - (dollars10 * 200) - (dollars5 * 100) - (dollars * 20)
 				- (quarters * 5) - (dimes * 2));
-		pennies = (int) ((changeDue / 0.01) - (dollars20 * 2000) - (dollars10 * 1000) - (dollars5 * 500)
-				- (dollars * 100) - (quarters * 25) - (dimes * 10) - (nickels * 5)); // TODO: Random pennies go missing
-																						// for some reason? Talk to a
-																						// TA.
+		pennies = (int) ((countPennies(changeDue)) - (dollars20 * 2000) - (dollars10 * 1000) - (dollars5 * 500)
+				- (dollars * 100) - (quarters * 25) - (dimes * 10) - (nickels * 5));
 
 		// If statements will prevent any pieces of currency with a value of 0 from
 		// being shown
@@ -78,6 +76,27 @@ public class CashRegister {
 			System.out.println("Pennies due: " + pennies);
 		}
 
+	}
+
+	public static double countPennies(double amount) {
+		// This method was created to push any double amount that isn't precise into the
+		// precise value. Some of the values would be the correct value if floored and
+		// others wouldn't, so this was my way of working around both possibilities
+
+		// Starts off the method by multiplying the value by 100.
+		double newPennies = (double) (amount * 100);
+
+		// Attaches the value to the next highest value if it isn't already there.
+		newPennies = Math.ceil(newPennies);
+		// Divides it back into 100.
+		newPennies = newPennies / 100;
+		// Forces a double instead of an int and replaces the original pennies equation
+		newPennies = (double) (newPennies / 0.01);
+		// Math.ceil will get rid of any precision errors after the division of 0.01
+		newPennies = Math.ceil(newPennies);
+
+		// Send it back!
+		return newPennies;
 	}
 
 }
